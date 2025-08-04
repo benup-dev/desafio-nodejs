@@ -1,0 +1,22 @@
+name: Security Scan
+
+on:
+  push:
+    branches: [main, master]
+  pull_request:
+    branches: [main, master]
+
+# Evita execuções duplicadas simultâneas
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  semgrep-security-scan:
+    uses: benup-dev/.github/.github/workflows/semgrep-scan.yml@main # repositório remoto
+    with:
+      scan-mode: ${{ github.event_name == 'pull_request' && 'pr' || 'push' }}
+    secrets:
+      SEMGREP_APP_TOKEN: ${{ secrets.SEMGREP_APP_TOKEN }}
+      SLACK_BOT_TOKEN: ${{ secrets.SLACK_BOT_TOKEN }}
+      SLACK_CHANNEL: ${{ secrets.SLACK_CHANNEL }}
