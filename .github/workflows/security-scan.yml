@@ -6,7 +6,7 @@ on:
   pull_request:
     branches: [main, master]
 
-# Evita execuções duplicadas simultâneas
+# Evita execuções duplicadas simultâneas.
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
   cancel-in-progress: true
